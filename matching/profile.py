@@ -16,6 +16,15 @@ TITLE_NOISE_KEYWORDS = [
     "inside sales", "social media", "concept/copy"
 ]
 
+# Проверка на соответствие уровню (если трек Junior, отсекаем Senior/Staff/Lead/Mid)
+title_lower = job.title.lower()
+if "junior" in track.title.lower() or "jun" in track.title.lower():
+    forbidden_levels = ["senior", "sr.", "staff", "lead", "principal", "mid", "middle"]
+    if any(level in title_lower for level in forbidden_levels):
+            # Пропускаем эту вакансию, так как она выше уровня Junior
+        continue
+
+
 def is_remote_job(job: JobItem) -> bool:
     if job.source_id in ["remotive", "jobicy"]:
         return True

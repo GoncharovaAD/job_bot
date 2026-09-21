@@ -87,6 +87,11 @@ async def check_and_send_jobs(bot: Bot, db: Database):
             if not is_remote_job(job):
                 continue
 
+            # 🚫 Фильтр: исключаем США
+            loc_lower = job.location.lower() if job.location else ""
+            if any(us_word in loc_lower for us_word in ["united states", ", us", "usa", "america"]):
+                continue
+
             # 2. Проверка на дубликат по компании и названию
             dedup_hash = generate_dedup_hash(job)
             if db.is_duplicate(dedup_hash):
@@ -98,6 +103,18 @@ async def check_and_send_jobs(bot: Bot, db: Database):
                 continue
 
             card_text = format_job_card(track_title, job, score)
+
+            # Очищаем теги от лишних символов списка / скобок / кавычек
+            raw_tags = job.tags if getattr(job, 'tags', None) else ["EU Remote"]
+            cleaned_tags = []
+            for t in raw_tags:
+                clean_t = str(t).replace("'", "").replace('"', "").replace("[", "").replace("]", "")
+                if clean_t.strip():
+                    cleaned_tags.append(clean_t.strip())
+            
+            tags_str = " · ".join(cleaned_tags[:3]) if cleaned_tags else "EU Remote"
+
+
             
             try:
                 await bot.send_message(
