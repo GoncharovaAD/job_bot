@@ -23,14 +23,17 @@ def calculate_match_score(job: JobItem, track) -> int:
     """Расчет соответствия вакансии треку."""
     title_lower = job.title.lower() if job.title else ""
     
+    # Универсально получаем название трека (проверяем title, name или query)
+    track_title = getattr(track, 'title', getattr(track, 'name', getattr(track, 'query', '')))
+    track_title_lower = track_title.lower() if track_title else ""
+    
     # Жестко отсекаем Senior / Staff / Lead / Mid для джун-треков
-    track_title_lower = track.title.lower() if track.title else ""
     if "junior" in track_title_lower or "jun" in track_title_lower:
         forbidden_levels = ["senior", "sr.", "staff", "lead", "principal", "mid", "middle"]
         if any(level in title_lower for level in forbidden_levels):
             return 0  # Сразу отсекаем
 
-    score = 50  #льняной базовый скор для прошедших фильтр
+    score = 50  # Базовый скор для прошедших фильтр
     
     # Простая проверка по ключевым словам трека
     keywords = getattr(track, 'search_keywords', [])
