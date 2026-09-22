@@ -45,7 +45,3 @@ async def debug_search():
 
 if __name__ == "__main__":
     asyncio.run(debug_search())
-
-
-data = response.json()
-print(f"Тип данных: {type(data)}, Содержимое: {data[:2] if isinstance(data, list) else data}")

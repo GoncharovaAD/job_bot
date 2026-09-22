@@ -27,7 +27,7 @@ COUNTRY_FLAGS = {
     "norway": "🇳🇴", "oslo": "🇳🇴"
 }
 
-def format_job_card(track_name: str, job: JobItem, score: int) -> str:
+def format_job_card(track_title: str, job: JobItem, score: int) -> str:
     """Формирует аккуратную карточку вакансии для Telegram."""
     clean_title = (
         job.title.replace("<b>", "")
@@ -48,10 +48,18 @@ def format_job_card(track_name: str, job: JobItem, score: int) -> str:
     else:
         location_str = f"{flag} Remote | {job.location}"
 
-    tags_str = " · ".join([t for t in job.tags if t][:3]) if getattr(job, 'tags', None) else "EU Remote"
+    # Очистка тегов от кавычек и скобок (Europe (['Contract']) -> Contract)
+    raw_tags = job.tags if getattr(job, 'tags', None) else ["EU Remote"]
+    cleaned_tags = []
+    for t in raw_tags:
+        clean_t = str(t).replace("'", "").replace('"', "").replace("[", "").replace("]", "")
+        if clean_t.strip():
+            cleaned_tags.append(clean_t.strip())
+            
+    tags_str = " · ".join(cleaned_tags[:3]) if cleaned_tags else "EU Remote"
 
     return (
-        f"🎯 <b>{track_name}</b>\n\n"
+        f"🎯 <b>{track_title}</b>\n\n"
         f"<b>{clean_title}</b>\n"
         f"<i>{job.company}</i> · <i>{tags_str}</i>\n"
         f"📍 {location_str}\n"
@@ -63,7 +71,6 @@ async def check_and_send_jobs(bot: Bot, db: Database):
     sources = get_all_sources(ADZUNA_APP_ID, ADZUNA_APP_KEY)
     sent_total = 0
 
-    # Исправлено: перебираем список TRACKS напрямую
     for track in TRACKS:
         track_title = getattr(track, 'name', getattr(track, 'title', 'Job Track'))
         print(f"\n=== Fetching for Track: {track_title} ===")
@@ -87,34 +94,22 @@ async def check_and_send_jobs(bot: Bot, db: Database):
             if not is_remote_job(job):
                 continue
 
-            # 🚫 Фильтр: исключаем США
+            # 🚫 1.1. Исключаем США
             loc_lower = job.location.lower() if job.location else ""
             if any(us_word in loc_lower for us_word in ["united states", ", us", "usa", "america"]):
                 continue
 
-            # 2. Проверка на дубликат по компании и названию
+            # 2. Проверка на дубликат по хэшу
             dedup_hash = generate_dedup_hash(job)
             if db.is_duplicate(dedup_hash):
                 continue
 
-            # 3. Расчет скоринга и проверка негативных слов
+            # 3. Расчет скоринга
             score = calculate_match_score(job, track)
             if score == 0:
                 continue
 
             card_text = format_job_card(track_title, job, score)
-
-            # Очищаем теги от лишних символов списка / скобок / кавычек
-            raw_tags = job.tags if getattr(job, 'tags', None) else ["EU Remote"]
-            cleaned_tags = []
-            for t in raw_tags:
-                clean_t = str(t).replace("'", "").replace('"', "").replace("[", "").replace("]", "")
-                if clean_t.strip():
-                    cleaned_tags.append(clean_t.strip())
-            
-            tags_str = " · ".join(cleaned_tags[:3]) if cleaned_tags else "EU Remote"
-
-
             
             try:
                 await bot.send_message(
