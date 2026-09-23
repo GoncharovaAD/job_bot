@@ -105,7 +105,7 @@ async def check_and_send_jobs(bot: Bot, db: Database):
 
             # 3. Расчет скоринга по профилю "Technical Detective" (строгий порог 75%)
             score = calculate_match_score(job, track)
-            if score < 75:
+            if score < 60:
                 continue
 
             card_text = format_job_card(track_title, job, score)
