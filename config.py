@@ -29,14 +29,13 @@ TRACKS = [
     TrackConfig(
         name="🕵️‍♂️ RESEARCH & TECHNICAL INVESTIGATION",
         search_keywords=[
-            "technical research", "research engineer", "research analyst", 
-            "information analyst", "technical detective", "investigate",
-            "documentation engineer", "api documentation", "knowledge engineer"
+            "technical writer", "documentation engineer", "research analyst", 
+            "research engineer", "api documentation", "knowledge engineer", "analyst"
         ],
         keywords=[
             "research", "investigate", "troubleshoot", "debug", "analyze", 
-            "verify", "root cause", "trace", "reverse-engineer", "api", "python",
-            "documentation", "git", "knowledge base", "rag", "information extraction"
+            "verify", "root cause", "trace", "api", "python",
+            "documentation", "git", "knowledge base", "rag"
         ],
         negative_keywords=[
             "junior", "intern", "manager", "lead", "director", "head", "architect", 
@@ -46,8 +45,8 @@ TRACKS = [
     TrackConfig(
         name="🐍 PYTHON, BACKEND & AUTOMATION",
         search_keywords=[
-            "python developer", "backend engineer", "automation engineer", 
-            "research software engineer", "scientific software engineer", "data automation"
+            "python", "backend", "automation", "research software", 
+            "data analyst", "scientific", "scripting"
         ],
         keywords=[
             "python", "backend", "api", "rest", "json", "git", "github", 
@@ -62,7 +61,7 @@ TRACKS = [
         name="🌍 WEATHER, CLIMATE & SCIENTIFIC TECH",
         search_keywords=[
             "meteorology", "weather", "climate", "atmospheric", "remote sensing", 
-            "satellite data", "environmental data", "geospatial data", "scientific data"
+            "satellite", "environmental", "geospatial", "science"
         ],
         keywords=[
             "meteorology", "weather", "climate", "atmospheric", "science", 
