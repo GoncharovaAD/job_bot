@@ -104,9 +104,9 @@ async def check_and_send_jobs(bot: Bot, db: Database):
             if db.is_duplicate(dedup_hash):
                 continue
 
-            # 3. Расчет скоринга
+            # 3. Расчет скоринга и отсев всего, что ниже 75%
             score = calculate_match_score(job, track)
-            if score == 0:
+            if score < 75:
                 continue
 
             card_text = format_job_card(track_title, job, score)
@@ -138,7 +138,7 @@ async def main():
     bot = Bot(token=BOT_TOKEN)
     db = Database()
 
-    print(f"🚀 JobStormBot v2.1 запущен!")
+    print(f"🚀 JobStormBot v2.2 запущен!")
     print(f"⚙️ Интервал: каждые {CHECK_INTERVAL_MINUTES} мин. | Лимит: {MAX_JOBS_PER_CHECK} вакансий/чек.\n")
 
     while True:

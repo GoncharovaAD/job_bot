@@ -33,7 +33,7 @@ TRACKS = [
         name="DOCS & DOCS-AS-CODE (Mid/Senior)",
         search_keywords=[
             "technical writer", "documentation engineer", "docs as code", 
-            "docs-as-code", "api documentation", "developer documentation", "docs"
+            "docs-as-code", "api documentation", "developer documentation"
         ],
         keywords=[
             "technical writer", "documentation engineer", "docs-as-code", 
@@ -41,7 +41,8 @@ TRACKS = [
             "git", "openapi", "swagger", "sphinx", "mkdocs"
         ],
         negative_keywords=[
-            "junior", "intern", "support", "customer support", "copywriter"
+            "junior", "intern", "support", "customer support", "copywriter",
+            "manager", "lead", "director", "head", "architect", "vp", "vice president"
         ]
     ),
     TrackConfig(
@@ -49,15 +50,15 @@ TRACKS = [
         search_keywords=["python", "backend", "qa", "api qa", "devops", "automation"],
         keywords=["python", "backend", "qa", "testing", "devops", "automation", "api"],
         negative_keywords=[
-            "senior", "lead", "principal", "head", "architect", "support", 
-            "customer support", "helpdesk"
+            "senior", "sr.", "staff", "lead", "principal", "head", "architect", "support", 
+            "customer support", "helpdesk", "manager", "director"
         ]
     ),
     TrackConfig(
         name="WEATHER & CLIMATE TECH",
         search_keywords=["meteorology", "weather", "climate", "atmospheric"],
         keywords=["meteorology", "weather", "climate", "atmospheric", "data", "python", "gis"],
-        negative_keywords=["sales", "account manager", "commercial"]
+        negative_keywords=["sales", "account manager", "commercial", "manager", "lead"]
     )
 ]
 
