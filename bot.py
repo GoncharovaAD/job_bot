@@ -28,7 +28,7 @@ COUNTRY_FLAGS = {
 }
 
 def format_job_card(track_title: str, job: JobItem, score: int) -> str:
-    """Формирует аккуратную карточку вакансии для Telegram."""
+    """Формирует аккуратную карточку вакансии для Telegram в стиле Research-детекта."""
     clean_title = (
         job.title.replace("<b>", "")
         .replace("</b>", "")
@@ -48,7 +48,6 @@ def format_job_card(track_title: str, job: JobItem, score: int) -> str:
     else:
         location_str = f"{flag} Remote | {job.location}"
 
-    # Очистка тегов от кавычек и скобок (Europe (['Contract']) -> Contract)
     raw_tags = job.tags if getattr(job, 'tags', None) else ["EU Remote"]
     cleaned_tags = []
     for t in raw_tags:
@@ -90,7 +89,7 @@ async def check_and_send_jobs(bot: Bot, db: Database):
                 print(f"⚠️ Достигнут лимит MAX_JOBS_PER_CHECK ({MAX_JOBS_PER_CHECK}).")
                 return
 
-            # 1. Жесткая проверка на Remote
+            # 1. Строгая проверка на Fully Remote (и отсечение гибридов/офиса)
             if not is_remote_job(job):
                 continue
 
@@ -99,12 +98,12 @@ async def check_and_send_jobs(bot: Bot, db: Database):
             if any(us_word in loc_lower for us_word in ["united states", ", us", "usa", "america"]):
                 continue
 
-            # 2. Проверка на дубликат по хэшу
+            # 2. Проверка дедупликации через базу
             dedup_hash = generate_dedup_hash(job)
             if db.is_duplicate(dedup_hash):
                 continue
 
-            # 3. Расчет скоринга и отсев всего, что ниже 75%
+            # 3. Расчет скоринга по профилю "Technical Detective" (строгий порог 75%)
             score = calculate_match_score(job, track)
             if score < 75:
                 continue
@@ -124,7 +123,7 @@ async def check_and_send_jobs(bot: Bot, db: Database):
                 new_jobs_count += 1
                 sent_total += 1
                 
-                await asyncio.sleep(2)  # Пауза между отправками
+                await asyncio.sleep(2)
             except Exception as e:
                 print(f"❌ Ошибка отправки в Telegram: {e}")
 
@@ -138,12 +137,12 @@ async def main():
     bot = Bot(token=BOT_TOKEN)
     db = Database()
 
-    print(f"🚀 JobStormBot v2.2 запущен!")
+    print(f"🚀 JobStormBot v2.2 (Technical Detective Edition) запущен!")
     print(f"⚙️ Интервал: каждые {CHECK_INTERVAL_MINUTES} мин. | Лимит: {MAX_JOBS_PER_CHECK} вакансий/чек.\n")
 
     while True:
         try:
-            print("⏰ Начинаем проверку свежих вакансий...")
+            print("⏰ Начинаем поисковую миссию...")
             await check_and_send_jobs(bot, db)
         except Exception as e:
             print(f"💥 Ошибка во время цикла сбора: {e}")
