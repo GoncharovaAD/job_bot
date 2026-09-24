@@ -8,22 +8,19 @@ def generate_dedup_hash(job: JobItem) -> str:
     return hashlib.md5(raw_string.encode('utf-8')).hexdigest()
 
 def is_remote_job(job: JobItem) -> bool:
-    """Мягкая и гибкая проверка на удаленку (EU / Worldwide / Remote)."""
+    """Проверка на удаленку (с допуском гибких форматов и Европы)."""
     loc_lower = job.location.lower() if job.location else ""
     title_lower = job.title.lower() if job.title else ""
     
-    # Жесткие стоп-сигналы для явного офиса
     office_signals = ["on-site only", "office only", "must be in office", "relocation required to office"]
     if any(sig in loc_lower for sig in office_signals):
         return False
 
-    # Если в локации или названии есть намек на удаленку, разрешаем
     remote_keywords = [
         "remote", "worldwide", "anywhere", "distributed", "wfh", 
         "eu", "europe", "germany", "netherlands", "spain", "poland", "global", "home"
     ]
     
-    # Если локация пустая у надежных платформ — тоже даем шанс
     if not loc_lower:
         return True
 
@@ -34,13 +31,13 @@ def is_remote_job(job: JobItem) -> bool:
 
 def calculate_match_score(job: JobItem, track) -> int:
     """
-    Интеллектуальный скоринг сбалансированного типа.
+    Интеллектуальный скоринг с упором на научные данные, метеорологию и расследования.
     """
     title_lower = job.title.lower() if job.title else ""
     job_tags_str = " ".join([str(t).lower() for t in getattr(job, 'tags', [])])
     full_job_info = f"{title_lower} {job_tags_str}"
     
-    # 1. Негативные ключевые слова трека
+    # 1. Негативные ключевые слова
     negative_keywords = getattr(track, 'negative_keywords', [])
     for neg in negative_keywords:
         if neg.lower() in full_job_info:
@@ -59,29 +56,30 @@ def calculate_match_score(job: JobItem, track) -> int:
         if any(level in full_job_info for level in forbidden_levels):
             return 0  
 
-    # Базовый старт выше, чтобы хорошие вакансии пробивали порог
     score = 40  
     
     # Детективные и аналитические сигналы
     detective_signals = [
         "research", "investigate", "troubleshoot", "debug", "analyze", 
-        "verify", "root cause", "trace", "api", "problem"
+        "verify", "root cause", "trace", "api", "problem", "uncertainty"
     ]
     detective_matches = sum(1 for sig in detective_signals if sig in full_job_info)
-    score += detective_matches * 12
+    score += detective_matches * 10
 
-    # Технические маркеры
-    tech_signals = [
-        "python", "sql", "postgresql", "api", "git", "automation", 
-        "meteorology", "climate", "science", "data", "documentation", "writer"
+    # Научные, метеорологические и дата-инструментальные маркеры (сильный вес!)
+    science_tech_signals = [
+        "meteorology", "weather", "climate", "atmospheric", "science", 
+        "python", "xarray", "netcdf", "grib", "reanalysis", "ensemble",
+        "spatial", "gis", "satellite", "environmental", "observational",
+        "sql", "postgresql", "data analysis", "sensor", "instrumentation"
     ]
-    tech_matches = sum(1 for ts in tech_signals if ts in full_job_info)
-    score += tech_matches * 8
+    science_matches = sum(1 for sts in science_tech_signals if sts in full_job_info)
+    score += science_matches * 12
 
-    # Совпадение по ключевым словам трека
+    # Совпадение по поисковым словам трека
     keywords = getattr(track, 'search_keywords', [])
     matched_keywords = sum(1 for kw in keywords if kw.lower() in title_lower)
     if matched_keywords > 0:
-        score += matched_keywords * 15
+        score += matched_keywords * 10
         
     return min(score, 100)

@@ -30,7 +30,8 @@ TRACKS = [
         name="🕵️‍♂️ RESEARCH & TECHNICAL INVESTIGATION",
         search_keywords=[
             "technical writer", "documentation engineer", "research analyst", 
-            "research engineer", "api documentation", "knowledge engineer", "analyst"
+            "research engineer", "research technician", "scientific technician",
+            "technical-scientific staff", "laboratory engineer", "api documentation"
         ],
         keywords=[
             "research", "investigate", "troubleshoot", "debug", "analyze", 
@@ -38,7 +39,7 @@ TRACKS = [
             "documentation", "git", "knowledge base", "rag"
         ],
         negative_keywords=[
-            "junior", "intern", "manager", "lead", "director", "head", "architect", 
+            "senior", "sr.", "staff", "lead", "principal", "head", "architect", 
             "vp", "sales", "account manager", "commercial", "customer support", "helpdesk"
         ]
     ),
@@ -46,7 +47,7 @@ TRACKS = [
         name="🐍 PYTHON, BACKEND & AUTOMATION",
         search_keywords=[
             "python", "backend", "automation", "research software", 
-            "data analyst", "scientific", "scripting"
+            "data analyst", "scientific", "scripting", "measurement engineer"
         ],
         keywords=[
             "python", "backend", "api", "rest", "json", "git", "github", 
@@ -61,11 +62,14 @@ TRACKS = [
         name="🌍 WEATHER, CLIMATE & SCIENTIFIC TECH",
         search_keywords=[
             "meteorology", "weather", "climate", "atmospheric", "remote sensing", 
-            "satellite", "environmental", "geospatial", "science"
+            "satellite", "environmental", "geospatial", "science",
+            "scientific instrumentation", "environmental monitoring", 
+            "atmospheric instrumentation", "observational scientist", "field engineer"
         ],
         keywords=[
             "meteorology", "weather", "climate", "atmospheric", "science", 
-            "python", "gis", "satellite", "data analysis", "remote sensing", "environmental"
+            "python", "gis", "satellite", "data analysis", "remote sensing", 
+            "environmental", "xarray", "numpy", "netcdf", "grib", "forecast"
         ],
         negative_keywords=[
             "sales", "account manager", "commercial", "manager", "lead"
@@ -73,4 +77,4 @@ TRACKS = [
     )
 ]
 
-TECH_STACK_KEYWORDS = ["python", "git", "markdown", "api", "rest", "swagger", "openapi", "docker", "ci/cd", "postgresql"]
+TECH_STACK_KEYWORDS = ["python", "git", "markdown", "api", "rest", "swagger", "openapi", "docker", "ci/cd", "postgresql", "xarray", "netcdf"]
