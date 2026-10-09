@@ -16,7 +16,7 @@ ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY", "")
 
 DB_FILE = os.getenv("DB_FILE", "jobs.db")
 CHECK_INTERVAL_MINUTES = int(os.getenv("CHECK_INTERVAL_MINUTES", 60))
-MAX_JOBS_PER_CHECK = int(os.getenv("MAX_JOBS_PER_CHECK", 10))
+MAX_JOBS_PER_CHECK = int(os.getenv("MAX_JOBS_PER_CHECK", 15))
 
 @dataclass
 class TrackConfig:
@@ -29,9 +29,9 @@ TRACKS = [
     TrackConfig(
         name="🕵️‍♂️ RESEARCH & TECHNICAL INVESTIGATION",
         search_keywords=[
-            "technical writer", "documentation engineer", "research analyst", 
-            "research engineer", "research technician", "scientific technician",
-            "technical-scientific staff", "laboratory engineer", "api documentation"
+            "technical research", "research engineer", "research analyst", 
+            "research technician", "scientific technician", "technical-scientific staff", 
+            "laboratory engineer", "api documentation"
         ],
         keywords=[
             "research", "investigate", "troubleshoot", "debug", "analyze", 
@@ -44,37 +44,52 @@ TRACKS = [
         ]
     ),
     TrackConfig(
-        name="🐍 PYTHON, BACKEND & AUTOMATION",
+        name="⚡ PYTHON, DATA, LINUX & HARDWARE / ROBOTICS",
         search_keywords=[
-            "python", "backend", "automation", "research software", 
-            "data analyst", "scientific", "scripting", "measurement engineer"
+            "python developer", "embedded python", "robotics software engineer", 
+            "instrumentation engineer", "firmware engineer", "iot engineer", 
+            "esp32", "sensor data engineer", "hardware software"
         ],
         keywords=[
-            "python", "backend", "api", "rest", "json", "git", "github", 
-            "automation", "database", "postgresql", "sql", "docker", "troubleshoot"
+            "python", "data", "api", "git", "linux", "electronics", 
+            "soldering", "esp32", "sensors", "instrumentation", "robotics", "embedded"
         ],
         negative_keywords=[
             "senior", "sr.", "staff", "lead", "principal", "head", "architect", 
-            "manager", "director", "support", "helpdesk", "customer support"
+            "manager", "director", "support", "customer support"
         ]
     ),
     TrackConfig(
         name="🌍 WEATHER, CLIMATE & SCIENTIFIC TECH",
         search_keywords=[
             "meteorology", "weather", "climate", "atmospheric", "remote sensing", 
-            "satellite", "environmental", "geospatial", "science",
-            "scientific instrumentation", "environmental monitoring", 
-            "atmospheric instrumentation", "observational scientist", "field engineer"
+            "satellite data", "environmental data", "geospatial data", "scientific data",
+            "environmental monitoring", "observational scientist"
         ],
         keywords=[
             "meteorology", "weather", "climate", "atmospheric", "science", 
             "python", "gis", "satellite", "data analysis", "remote sensing", 
-            "environmental", "xarray", "numpy", "netcdf", "grib", "forecast"
+            "environmental", "sensors", "instrumentation"
         ],
         negative_keywords=[
             "sales", "account manager", "commercial", "manager", "lead"
         ]
+    ),
+    TrackConfig(
+        name="✍️ JUNIOR TECHNICAL WRITER (Friend's Track)",
+        search_keywords=[
+            "junior technical writer", "technical writer", "documentation specialist", 
+            "junior documentation engineer", "api documentation writer"
+        ],
+        keywords=[
+            "technical writer", "documentation", "api documentation", "markdown", 
+            "git", "writer", "manual", "guide", "confluence"
+        ],
+        negative_keywords=[
+            "senior", "sr.", "lead", "principal", "head", "architect", 
+            "manager", "director", "staff", "5+ years", "3+ years"
+        ]
     )
 ]
 
-TECH_STACK_KEYWORDS = ["python", "git", "markdown", "api", "rest", "swagger", "openapi", "docker", "ci/cd", "postgresql", "xarray", "netcdf"]
+TECH_STACK_KEYWORDS = ["python", "git", "linux", "markdown", "api", "rest", "esp32", "sensors", "docker", "postgresql", "xarray"]
