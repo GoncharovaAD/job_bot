@@ -4,13 +4,17 @@ from .arbeitnow import ArbeitnowSource
 from .remotive import RemotiveSource
 from .adzuna import AdzunaSource
 from .jobicy import JobicySource
+from .remoteok import RemoteOKSource
+from .himalayas import HimalayasSource
 
 def get_all_sources(adzuna_id: str = "", adzuna_key: str = "") -> List[BaseSource]:
     """Возвращает список всех активных источников вакансий."""
     sources: List[BaseSource] = [
         ArbeitnowSource(),
         RemotiveSource(),
-        JobicySource()
+        JobicySource(),
+        RemoteOKSource(),
+        HimalayasSource()
     ]
     
     # Добавляем Adzuna только если переданы API ключи
