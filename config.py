@@ -76,18 +76,18 @@ TRACKS = [
         ]
     ),
     TrackConfig(
-        name="✍️ JUNIOR TECHNICAL WRITER (Friend's Track)",
+        name="✍️ TECHNICAL WRITER (Up to 3 years experience)",
         search_keywords=[
-            "junior technical writer", "technical writer", "documentation specialist", 
-            "junior documentation engineer", "api documentation writer"
+            "technical writer", "documentation engineer", "api documentation writer", 
+            "software technical writer", "junior technical writer", "technical author"
         ],
         keywords=[
             "technical writer", "documentation", "api documentation", "markdown", 
-            "git", "writer", "manual", "guide", "confluence"
+            "git", "writer", "manual", "guide", "confluence", "api", "rest"
         ],
         negative_keywords=[
             "senior", "sr.", "lead", "principal", "head", "architect", 
-            "manager", "director", "staff", "5+ years", "3+ years"
+            "manager", "director", "staff", "5+ years", "6+ years", "7+ years"
         ]
     )
 ]
