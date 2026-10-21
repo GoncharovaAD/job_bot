@@ -15,7 +15,7 @@ class TrackConfig:
 # ---------------------------------------------------------------------------
 # API KEY CONFIGURATION
 # ---------------------------------------------------------------------------
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 ADZUNA_APP_ID = os.environ.get("ADZUNA_APP_ID", "")
