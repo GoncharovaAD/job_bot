@@ -154,6 +154,8 @@ async def check_and_send_jobs(bot: Bot, db: Database):
 
         print(f"Finished {track_title}: {new_jobs_count} new unique jobs sent.")
 
+    return sent_total
+
 async def main():
     if not BOT_TOKEN or not TELEGRAM_CHAT_ID:
         print("❌ Ошибка: Укажи BOT_TOKEN и TELEGRAM_CHAT_ID в файле .env / config.py!")
@@ -165,10 +167,36 @@ async def main():
     print(f"🚀 JobStormBot v2.2 (Technical Detective Edition) запущен!")
     print(f"⚙️ Интервал: каждые {CHECK_INTERVAL_MINUTES} мин. | Лимит: {MAX_JOBS_PER_CHECK} вакансий/чек.\n")
 
+    # Отслеживаем время отправки последнего сообщения (вакансии или статуса)
+    last_sent_time = asyncio.get_event_loop().time()
+
     while True:
         try:
             print("⏰ Начинаем поисковую миссию...")
-            await check_and_send_jobs(bot, db)
+            
+            # check_and_send_jobs должен возвращать количество отправленных вакансий
+            sent_count = await check_and_send_jobs(bot, db)
+            
+            current_time = asyncio.get_event_loop().time()
+            
+            if sent_count > 0:
+                last_sent_time = current_time
+            else:
+                # 86400 секунд = 24 часа
+                if current_time - last_sent_time >= 86400:
+                    status_message = (
+                        "🕵️‍♂️ <b>Детективный отчет за сутки:</b>\n\n"
+                        "За последние 24 часа новых подходящих вакансий не обнаружено. "
+                        "Сканеры работают в штатном режиме, поиск продолжается! 🫡"
+                    )
+                    await bot.send_message(
+                        chat_id=TELEGRAM_CHAT_ID,
+                        text=status_message,
+                        parse_mode=ParseMode.HTML
+                    )
+                    print("ℹ️ Отправлен суточный отчет об отсутствии вакансий.")
+                    last_sent_time = current_time
+
         except Exception as e:
             print(f"💥 Ошибка во время цикла сбора: {e}")
 

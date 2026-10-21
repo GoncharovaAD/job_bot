@@ -1,95 +1,108 @@
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import List
-from dotenv import load_dotenv
-
-load_dotenv()
-
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", os.getenv("BOT_TOKEN", ""))
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", os.getenv("CHAT_ID", ""))
-
-BOT_TOKEN = TELEGRAM_BOT_TOKEN
-CHAT_ID = TELEGRAM_CHAT_ID
-
-ADZUNA_APP_ID = os.getenv("ADZUNA_APP_ID", "")
-ADZUNA_APP_KEY = os.getenv("ADZUNA_APP_KEY", "")
-
-DB_FILE = os.getenv("DB_FILE", "jobs.db")
-CHECK_INTERVAL_MINUTES = int(os.getenv("CHECK_INTERVAL_MINUTES", 60))
-MAX_JOBS_PER_CHECK = int(os.getenv("MAX_JOBS_PER_CHECK", 15))
 
 @dataclass
 class TrackConfig:
     name: str
     search_keywords: List[str]
     keywords: List[str]
-    negative_keywords: List[str] = field(default_factory=list)
+    negative_keywords: List[str]
 
+# ---------------------------------------------------------------------------
+# API KEY CONFIGURATION
+# ---------------------------------------------------------------------------
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+
+ADZUNA_APP_ID = os.environ.get("ADZUNA_APP_ID", "")
+ADZUNA_APP_KEY = os.environ.get("ADZUNA_APP_KEY", "")
+
+# ---------------------------------------------------------------------------
+# BOT TIMINGS & LIMITS
+# ---------------------------------------------------------------------------
+CHECK_INTERVAL_MINUTES = int(os.environ.get("CHECK_INTERVAL_MINUTES", "60"))
+MAX_JOBS_PER_CHECK = int(os.environ.get("MAX_JOBS_PER_CHECK", "15"))
+
+# ---------------------------------------------------------------------------
+# GLOBAL EXCLUSIONS (iGaming, Crypto, Fast-Paced Startups, Sole Writer)
+# ---------------------------------------------------------------------------
+GLOBAL_NEGATIVE_KEYWORDS = [
+    # Toxic niches
+    "casino", "gambling", "igaming", "betting", "poker", "slots",
+    "crypto", "web3", "blockchain", "defi", "nft", "token",
+    # Fast-paced / Burnout triggers
+    "fast-paced", "fast paced", "hustle", "wear many hats", "hypergrowth",
+    # Sole writer / High-stress roles
+    "sole technical writer", "first technical writer", "single technical writer",
+    "solo writer", "sole writer"
+]
+
+# ---------------------------------------------------------------------------
+# TRACK CONFIGURATIONS
+# ---------------------------------------------------------------------------
 TRACKS = [
+    # -----------------------------------------------------------------------
+    # 1. ANNA: SENIOR / LEAD DOCS ENGINEER (MedTech, Pharma & Regulated)
+    # -----------------------------------------------------------------------
     TrackConfig(
-        name="🕵️‍♂️ RESEARCH & TECHNICAL INVESTIGATION",
+        name="🏥 ANNA | MedTech, Pharma & Regulated Systems",
         search_keywords=[
-            "technical research", "research engineer", "research analyst", 
-            "research technician", "scientific technician", "technical-scientific staff", 
-            "laboratory engineer", "api documentation"
+            "medical device technical writer", "clinical documentation engineer",
+            "regulatory technical writer", "healthcare technical writer",
+            "validation technical writer", "biotech documentation",
+            "pharma technical writer", "clinical data writer"
         ],
         keywords=[
-            "research", "investigate", "troubleshoot", "debug", "analyze", 
-            "verify", "root cause", "trace", "api", "python",
-            "documentation", "git", "knowledge base", "rag"
+            "medtech", "healthcare", "pharma", "biotech", "clinical", "regulatory",
+            "validation", "gcp", "sop", "edc", "fda", "iso 13485", "healthtech",
+            "documentation", "technical writer", "docs-as-code", "markdown",
+            "confluence", "git", "python", "sql", "json", "postman"
         ],
-        negative_keywords=[
-            "senior", "sr.", "staff", "lead", "principal", "head", "architect", 
-            "vp", "sales", "account manager", "commercial", "customer support", "helpdesk"
+        negative_keywords=GLOBAL_NEGATIVE_KEYWORDS + [
+            "junior", "entry level", "intern", "8+ years", "10+ years"
         ]
     ),
+
+    # -----------------------------------------------------------------------
+    # 2. ANNA: CLEANTECH, ENVIRONMENTAL IOT & DATA ENGINEERING
+    # -----------------------------------------------------------------------
     TrackConfig(
-        name="⚡ PYTHON, DATA, LINUX & HARDWARE / ROBOTICS",
+        name="🌿 ANNA | CleanTech, Environmental IoT & Meteorology",
         search_keywords=[
-            "python developer", "embedded python", "robotics software engineer", 
-            "instrumentation engineer", "firmware engineer", "iot engineer", 
-            "esp32", "sensor data engineer", "hardware software"
+            "environmental data engineer", "iot documentation engineer",
+            "weather data engineer", "cleantech technical writer",
+            "gis documentation", "sensor data writer", "scientific data engineer"
         ],
         keywords=[
-            "python", "data", "api", "git", "linux", "electronics", 
-            "soldering", "esp32", "sensors", "instrumentation", "robotics", "embedded"
+            "cleantech", "iot", "sensors", "esp32", "environmental", "weather",
+            "meteorology", "gis", "remote sensing", "python", "postgresql",
+            "sql", "github actions", "mkdocs", "markdown", "api", "xarray",
+            "netcdf", "grib", "documentation", "docs-as-code"
         ],
-        negative_keywords=[
-            "senior", "sr.", "staff", "lead", "principal", "head", "architect", 
-            "manager", "director", "support", "customer support"
+        negative_keywords=GLOBAL_NEGATIVE_KEYWORDS + [
+            "junior", "entry level", "intern"
         ]
     ),
+
+    # -----------------------------------------------------------------------
+    # 3. DIANA: STABLE & CALM TECHNICAL WRITING (Mid/Junior+, 0.5–3 yrs)
+    # -----------------------------------------------------------------------
     TrackConfig(
-        name="🌍 WEATHER, CLIMATE & SCIENTIFIC TECH",
+        name="☕ DIANA | Calm & Stable Technical Writer",
         search_keywords=[
-            "meteorology", "weather", "climate", "atmospheric", "remote sensing", 
-            "satellite data", "environmental data", "geospatial data", "scientific data",
-            "environmental monitoring", "observational scientist"
+            "technical writer", "documentation writer", "software technical writer",
+            "junior technical writer", "technical author", "api documentation writer",
+            "technical documentation specialist"
         ],
         keywords=[
-            "meteorology", "weather", "climate", "atmospheric", "science", 
-            "python", "gis", "satellite", "data analysis", "remote sensing", 
-            "environmental", "sensors", "instrumentation"
+            "technical writer", "documentation", "markdown", "confluence",
+            "git", "api", "rest", "json", "manual", "guide", "sop", "clinical",
+            "healthcare", "saas", "user guide", "internal documentation"
         ],
-        negative_keywords=[
-            "sales", "account manager", "commercial", "manager", "lead"
-        ]
-    ),
-    TrackConfig(
-        name="✍️ TECHNICAL WRITER (Up to 3 years experience)",
-        search_keywords=[
-            "technical writer", "documentation engineer", "api documentation writer", 
-            "software technical writer", "junior technical writer", "technical author"
-        ],
-        keywords=[
-            "technical writer", "documentation", "api documentation", "markdown", 
-            "git", "writer", "manual", "guide", "confluence", "api", "rest"
-        ],
-        negative_keywords=[
-            "senior", "sr.", "lead", "principal", "head", "architect", 
-            "manager", "director", "staff", "5+ years", "6+ years", "7+ years"
+        negative_keywords=GLOBAL_NEGATIVE_KEYWORDS + [
+            "senior", "sr.", "lead", "principal", "head of", "director", "architect",
+            "5+ years", "6+ years", "7+ years", "8+ years"
         ]
     )
 ]
-
-TECH_STACK_KEYWORDS = ["python", "git", "linux", "markdown", "api", "rest", "esp32", "sensors", "docker", "postgresql", "xarray"]
