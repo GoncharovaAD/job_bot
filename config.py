@@ -2,6 +2,9 @@ import os
 from dataclasses import dataclass
 from typing import List
 
+# Путь к файлу базы данных SQLite
+DB_FILE = "jobs_database.db"
+
 @dataclass
 class TrackConfig:
     name: str
