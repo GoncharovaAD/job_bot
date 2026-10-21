@@ -1,5 +1,8 @@
 import asyncio
+import os
+import threading
 from typing import List
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from telegram import Bot
 from telegram.constants import ParseMode
 
@@ -11,6 +14,28 @@ from config import (
 from sources import get_all_sources, JobItem
 from matching.profile import calculate_match_score, generate_dedup_hash, is_remote_job
 from database import Database
+
+# --- Встроенный веб-сервер для прохождения Port Scan на Render ---
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is alive and running!")
+    
+    def log_message(self, format, *args):
+        # Отключаем спам-логи запросов в консоли
+        pass
+
+def run_health_server():
+    port = int(os.environ.get("PORT", 10000))
+    server_address = ("0.0.0.0", port)
+    httpd = HTTPServer(server_address, HealthCheckHandler)
+    print(f"🌐 Health check server bound to port {port}")
+    httpd.serve_forever()
+
+# Запускаем фоновый веб-сервер сразу при импорте/старте модуля
+threading.Thread(target=run_health_server, daemon=True).start()
+# -----------------------------------------------------------------
 
 COUNTRY_FLAGS = {
     "germany": "🇩🇪", "deutschland": "🇩🇪",
@@ -103,7 +128,7 @@ async def check_and_send_jobs(bot: Bot, db: Database):
             if db.is_duplicate(dedup_hash):
                 continue
 
-            # 3. Расчет скоринга по профилю "Technical Detective" (строгий порог 75%)
+            # 3. Расчет скоринга по профилю "Technical Detective"
             score = calculate_match_score(job, track)
             if score < 60:
                 continue
