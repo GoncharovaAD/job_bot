@@ -55,7 +55,9 @@ class RemoteOKSource(BaseSource):
                                 location=location if location else "Remote",
                                 url=url,
                                 source_id=self.name,
-                                tags=tags if isinstance(tags, list) else [str(tags)]
+                                tags=tags if isinstance(tags, list) else [str(tags)],
+                                original_id=str(item.get("id", title)),  # 👈 Добавили уникальный ID
+                                description=description
                             )
                         )
         except Exception as e:
