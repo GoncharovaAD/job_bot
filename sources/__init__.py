@@ -11,15 +11,17 @@ def get_all_sources(adzuna_id: str = "", adzuna_key: str = ""):
     sources = [
         ArbeitnowSource(),
         RemotiveSource(),
-        AdzunaSource(),
         JobicySource(),
         RemoteOKSource(),
         HimalayasSource(),
     ]
     
-    # Добавляем Adzuna только если ключи действительно переданы
+    # Добавляем Adzuna только при наличии обоих ключей
     if adzuna_id and adzuna_key:
-        sources.append(AdzunaSource(app_id=adzuna_id, app_key=adzuna_key))
+        try:
+            sources.append(AdzunaSource(app_id=adzuna_id, app_key=adzuna_key))
+        except Exception as e:
+            print(f"⚠️ Не удалось подключить Adzuna: {e}")
         
     return sources
 
