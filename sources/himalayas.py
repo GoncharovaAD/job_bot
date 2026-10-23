@@ -4,7 +4,7 @@ from .base import BaseSource, JobItem
 
 class HimalayasSource(BaseSource):
     def __init__(self):
-        super().__init__("himalayas")
+        self.name = "himalayas"
         self.api_url = "https://himalayas.app/api/search"
 
     async def fetch_jobs(self, search_keywords: List[str]) -> List[JobItem]:
