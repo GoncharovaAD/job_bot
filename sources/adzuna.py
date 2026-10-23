@@ -8,6 +8,7 @@ class AdzunaSource(BaseSource):
     EU_COUNTRIES = ["gb", "de", "nl", "fr", "at", "ch", "pl", "es", "it"]
 
     def __init__(self, app_id: str, app_key: str):
+        self.name = "Adzuna"
         self.app_id = app_id
         self.app_key = app_key
 
