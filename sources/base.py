@@ -13,10 +13,13 @@ class JobItem:
     description: str
     tags: List[str]
 
-class BaseSource(ABC):
-    name: str
-
-    @abstractmethod
-    async def fetch_jobs(self, keywords: List[str]) -> List[JobItem]:
-        """Получить список вакансий по ключам"""
-        pass
+class BaseSource:
+    def __init__(self, *args, **kwargs):
+        # Универсальный перехват любых аргументов из super().__init__(...)
+        if args:
+            self.name = str(args[0])
+        elif "name" in kwargs:
+            self.name = str(kwargs["name"])
+        else:
+            # Если имя не передано, берем имя класса (например, "HimalayasSource" -> "himalayas")
+            self.name = self.__class__.__name__.lower().replace("source", "")
